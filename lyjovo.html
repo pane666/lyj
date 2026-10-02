@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#010207;
+}
+
+body{
+    cursor:crosshair;
+}
+
+/* =========================
+   背景
+========================= */
+
+.background{
+    position:fixed;
+    inset:0;
+    z-index:0;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 105%,
+            #172e70 0%,
+            #0b153b 30%,
+            #040719 65%,
+            #010207 100%
+        );
+}
+
+
+/* =========================
+   银河
+========================= */
+
+.galaxy{
+    position:fixed;
+
+    width:180%;
+    height:75%;
+
+    left:-40%;
+    top:-8%;
+
+    z-index:2;
+
+    transform:rotate(-23deg);
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(225,235,255,.18),
+            rgba(140,175,255,.10) 25%,
+            rgba(80,110,220,.04) 48%,
+            transparent 72%
+        );
+
+    filter:blur(25px);
+
+    opacity:0;
+
+    animation:
+        galaxyIn 6s ease forwards,
+        galaxyMove 45s ease-in-out infinite alternate;
+}
+
+@keyframes galaxyIn{
+    from{opacity:0}
+    to{opacity:1}
+}
+
+@keyframes galaxyMove{
+    from{
+        transform:rotate(-23deg) translateX(-3%);
+    }
+
+    to{
+        transform:rotate(-20deg) translateX(3%);
+    }
+}
+
+.galaxy::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        repeating-linear-gradient(
+            110deg,
+            transparent 0,
+            transparent 28px,
+            rgba(255,255,255,.025) 30px,
+            transparent 65px
+        );
+}
+
+
+/* =========================
+   星云
+========================= */
+
+.nebula{
+    position:fixed;
+
+    border-radius:50%;
+
+    filter:blur(90px);
+
+    z-index:3;
+
+    pointer-events:none;
+
+    mix-blend-mode:screen;
+}
+
+.nebula1{
+    width:600px;
+    height:600px;
+
+    left:-250px;
+    top:10%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(88,65,255,.23),
+            transparent 70%
+        );
+
+    animation:
+        nebula1 20s ease-in-out infinite alternate;
+}
+
+.nebula2{
+    width:700px;
+    height:700px;
+
+    right:-300px;
+    top:35%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(30,140,255,.17),
+            transparent 70%
+        );
+
+    animation:
+        nebula2 25s ease-in-out infinite alternate;
+}
+
+.nebula3{
+    width:550px;
+    height:550px;
+
+    left:30%;
+    top:-320px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,70,190,.08),
+            transparent 70%
+        );
+
+    animation:
+        nebula3 28s ease-in-out infinite alternate;
+}
+
+@keyframes nebula1{
+    from{
+        transform:translate(-20px,-20px) scale(.95);
+    }
+
+    to{
+        transform:translate(90px,60px) scale(1.15);
+    }
+}
+
+@keyframes nebula2{
+    from{
+        transform:translate(20px,20px) scale(1);
+    }
+
+    to{
+        transform:translate(-80px,-40px) scale(1.15);
+    }
+}
+
+@keyframes nebula3{
+    from{
+        transform:translateY(0) scale(1);
+    }
+
+    to{
+        transform:translateY(90px) scale(1.2);
+    }
+}
+
+
+/* =========================
+   月亮
+========================= */
+
+.moon{
+    position:fixed;
+
+    width:125px;
+    height:125px;
+
+    right:12%;
+    top:10%;
+
+    border-radius:50%;
+
+    z-index:8;
+
+    background:
+        radial-gradient(
+            circle at 35% 32%,
+            #ffffff,
+            #fffdf0 45%,
+            #eee7ca 80%,
+            #d7cfb3
+        );
+
+    box-shadow:
+        0 0 15px #fff,
+        0 0 35px rgba(255,248,215,.8),
+        0 0 100px rgba(180,210,255,.4);
+
+    opacity:0;
+
+    animation:
+        moonIn 5s 1.5s ease forwards;
+}
+
+@keyframes moonIn{
+    from{
+        opacity:0;
+        transform:scale(.7);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.moon::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 35%,
+            rgba(160,150,125,.12) 0 6%,
+            transparent 7%
+        ),
+        radial-gradient(
+            circle at 67% 27%,
+            rgba(160,150,125,.10) 0 7%,
+            transparent 8%
+        ),
+        radial-gradient(
+            circle at 57% 68%,
+            rgba(160,150,125,.13) 0 5%,
+            transparent 6%
+        );
+}
+
+.moon::after{
+    content:"";
+
+    position:absolute;
+
+    inset:-50px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,245,210,.18),
+            transparent 65%
+        );
+
+    filter:blur(12px);
+
+    z-index:-1;
+}
+
+
+/* =========================
+   Canvas
+========================= */
+
+canvas{
+    position:fixed;
+    inset:0;
+
+    width:100%;
+    height:100%;
+}
+
+#sky{
+    z-index:5;
+}
+
+#effects{
+    z-index:50;
+
+    pointer-events:none;
+}
+
+
+/* =========================
+   山
+========================= */
+
+.mountains{
+    position:fixed;
+
+    left:0;
+    bottom:-5px;
+
+    width:100%;
+    height:29%;
+
+    z-index:30;
+
+    pointer-events:none;
+}
+
+.mountain{
+    position:absolute;
+
+    bottom:0;
+
+    width:0;
+    height:0;
+
+    border-left:210px solid transparent;
+    border-right:210px solid transparent;
+    border-bottom:290px solid #02030a;
+}
+
+.m1{
+    left:-160px;
+    transform:scale(1.3);
+}
+
+.m2{
+    left:10%;
+    transform:scale(.8);
+}
+
+.m3{
+    left:29%;
+    transform:scale(1.25);
+}
+
+.m4{
+    left:50%;
+    transform:scale(.9);
+}
+
+.m5{
+    left:68%;
+    transform:scale(1.2);
+}
+
+.m6{
+    right:-180px;
+    transform:scale(1.3);
+}
+
+
+/* =========================
+   山间雾
+========================= */
+
+.fog{
+    position:fixed;
+
+    left:-20%;
+    bottom:5%;
+
+    width:140%;
+    height:22%;
+
+    z-index:35;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(120,155,220,.09),
+            transparent 65%
+        );
+
+    filter:blur(35px);
+
+    animation:
+        fogMove 24s ease-in-out infinite alternate;
+}
+
+@keyframes fogMove{
+    from{
+        transform:translateX(-4%);
+    }
+
+    to{
+        transform:translateX(4%);
+    }
+}
+
+
+/* =========================
+   前景
+========================= */
+
+.foreground{
+    position:fixed;
+
+    left:0;
+    bottom:0;
+
+    width:100%;
+    height:16%;
+
+    z-index:40;
+
+    background:
+        linear-gradient(
+            to top,
+            #010207,
+            rgba(1,2,7,.9),
+            transparent
+        );
+}
+
+
+/* =========================
+   开场
+========================= */
+
+.intro{
+    position:fixed;
+
+    inset:0;
+
+    z-index:200;
+
+    background:#010207;
+
+    pointer-events:none;
+
+    animation:
+        introFade 6s ease forwards;
+}
+
+@keyframes introFade{
+
+    0%{
+        opacity:1;
+    }
+
+    70%{
+        opacity:1;
+    }
+
+    100%{
+        opacity:0;
+    }
+}
+
+
+/* =========================
+   音乐
+========================= */
+
+.music{
+    position:fixed;
+
+    left:20px;
+    top:20px;
+
+    width:44px;
+    height:44px;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.25);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    z-index:300;
+
+    backdrop-filter:blur(12px);
+
+    transition:.3s;
+}
+
+.music:hover{
+    transform:scale(1.12);
+
+    box-shadow:
+        0 0 25px rgba(120,200,255,.4);
+}
+
+
+/* =========================
+   手机
+========================= */
+
+@media(max-width:600px){
+
+    .moon{
+        width:82px;
+        height:82px;
+
+        right:8%;
+        top:9%;
+    }
+
+    .mountains{
+        height:23%;
+    }
+
+    .nebula{
+        filter:blur(70px);
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="background"></div>
+
+<div class="galaxy"></div>
+
+<div class="nebula nebula1"></div>
+<div class="nebula nebula2"></div>
+<div class="nebula nebula3"></div>
+
+<canvas id="sky"></canvas>
+
+<div class="moon"></div>
+
+<div class="mountains">
+
+    <div class="mountain m1"></div>
+    <div class="mountain m2"></div>
+    <div class="mountain m3"></div>
+    <div class="mountain m4"></div>
+    <div class="mountain m5"></div>
+    <div class="mountain m6"></div>
+
+</div>
+
+<div class="fog"></div>
+
+<div class="foreground"></div>
+
+<canvas id="effects"></canvas>
+
+<div class="intro"></div>
+
+<button
+    class="music"
+    id="musicBtn"
+>
+    🎵
+</button>
+
+<audio
+    id="music"
+    loop
+>
+    <source
+        src="music.mp3"
+        type="audio/mpeg"
+    >
+</audio>
+
+
+<script>
+
+/* =====================================================
+   Canvas 初始化
+===================================================== */
+
+const sky =
+    document.getElementById("sky");
+
+const ctx =
+    sky.getContext("2d");
+
+const effects =
+    document.getElementById("effects");
+
+const ectx =
+    effects.getContext("2d");
+
+
+let W =
+    window.innerWidth;
+
+let H =
+    window.innerHeight;
+
+
+function resize(){
+
+    W =
+        window.innerWidth;
+
+    H =
+        window.innerHeight;
+
+    const dpr =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    sky.width =
+        W * dpr;
+
+    sky.height =
+        H * dpr;
+
+    effects.width =
+        W * dpr;
+
+    effects.height =
+        H * dpr;
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+    ectx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+}
+
+resize();
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+
+/* =====================================================
+   鼠标 / 手指视差
+===================================================== */
+
+let mouseX =
+    W / 2;
+
+let mouseY =
+    H / 2;
+
+let targetX =
+    W / 2;
+
+let targetY =
+    H / 2;
+
+
+window.addEventListener(
+    "mousemove",
+    e => {
+
+        targetX =
+            e.clientX;
+
+        targetY =
+            e.clientY;
+
+    }
+);
+
+
+window.addEventListener(
+    "touchmove",
+    e => {
+
+        if(e.touches.length){
+
+            targetX =
+                e.touches[0].clientX;
+
+            targetY =
+                e.touches[0].clientY;
+        }
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =====================================================
+   星星
+===================================================== */
+
+const stars = [];
+
+const count =
+    W < 600
+        ? 170
+        : 380;
+
+
+for(let i=0;i<count;i++){
+
+    stars.push({
+
+        x:
+            Math.random()*W,
+
+        y:
+            Math.random()*H*.92,
+
+        r:
+            Math.random()*1.5+.2,
+
+        alpha:
+            Math.random()*.7+.15,
+
+        speed:
+            Math.random()*.025+.005,
+
+        phase:
+            Math.random()*Math.PI*2,
+
+        depth:
+            Math.random()
+
+    });
+}
+
+
+/* =====================================================
+   流星
+===================================================== */
+
+const meteors = [];
+
+
+function spawnMeteor(
+    superMeteor=false
+){
+
+    const angle =
+        Math.PI/180 *
+        (32+Math.random()*15);
+
+    const speed =
+        superMeteor
+            ? 1050+Math.random()*500
+            : 600+Math.random()*600;
+
+    meteors.push({
+
+        x:
+            W*(.55+Math.random()*.7),
+
+        y:
+            -80+
+            Math.random()*H*.5,
+
+        vx:
+            -Math.cos(angle)*speed,
+
+        vy:
+            Math.sin(angle)*speed,
+
+        life:0,
+
+        maxLife:
+            superMeteor
+                ? 1.8+Math.random()*.8
+                : 1.1+Math.random()*.8,
+
+        size:
+            superMeteor
+                ? 4+Math.random()*3
+                : 1.5+Math.random()*2,
+
+        trail:
+            superMeteor
+                ? 220+Math.random()*150
+                : 90+Math.random()*100,
+
+        superMeteor
+
+    });
+}
+
+
+/* =====================================================
+   爆炸粒子
+===================================================== */
+
+const particles = [];
+
+
+function createExplosion(
+    x,
+    y
+){
+
+    /* 星尘 */
+
+    for(
+        let i=0;
+        i<70;
+        i++
+    ){
+
+        const angle =
+            Math.random()*
+            Math.PI*2;
+
+        const speed =
+            Math.random()*180+30;
+
+        particles.push({
+
+            x:x,
+
+            y:y,
+
+            vx:
+                Math.cos(angle)*speed,
+
+            vy:
+                Math.sin(angle)*speed,
+
+            life:1,
+
+            size:
+                Math.random()*2.5+.5,
+
+            color:
+                Math.random()>.5
+                    ?"255,255,255"
+                    :"120,205,255"
+        });
+    }
+
+
+    /* 爱心 */
+
+    for(
+        let i=0;
+        i<45;
+        i++
+    ){
+
+        const t =
+            Math.PI*2*i/45;
+
+        const hx =
+            16*Math.pow(
+                Math.sin(t),
+                3
+            );
+
+        const hy =
+            -(
+                13*Math.cos(t)
+                -5*Math.cos(2*t)
+                -2*Math.cos(3*t)
+                -Math.cos(4*t)
+            );
+
+        particles.push({
+
+            x:x,
+
+            y:y,
+
+            vx:hx*3,
+
+            vy:hy*3,
+
+            life:1,
+
+            size:2,
+
+            color:
+                "255,105,170",
+
+            heart:true
+        });
+    }
+}
+
+
+/* =====================================================
+   点击
+===================================================== */
+
+let clickCount = 0;
+
+let lastClick = 0;
+
+
+window.addEventListener(
+    "click",
+    e => {
+
+        if(
+            e.target.closest(".music")
+        ){
+            return;
+        }
+
+
+        const now =
+            Date.now();
+
+
+        if(
+            now-lastClick >
+            1800
+        ){
+
+            clickCount=0;
+
+        }
+
+
+        lastClick =
+            now;
+
+        clickCount++;
+
+
+        /* 普通点击 */
+
+        createExplosion(
+            e.clientX,
+            e.clientY
+        );
+
+
+        /* 五次点击 */
+
+        if(
+            clickCount>=5
+        ){
+
+            clickCount=0;
+
+            heartEvent();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   爱心彩蛋
+===================================================== */
+
+let heartMode=false;
+
+let heartTimer=0;
+
+
+function heartEvent(){
+
+    if(heartMode)
+        return;
+
+    heartMode=true;
+
+    heartTimer=0;
+
+    /* 大量爱心粒子 */
+
+    for(
+        let i=0;
+        i<160;
+        i++
+    ){
+
+        const t =
+            Math.PI*2*i/160;
+
+        const scale =
+            8+
+            Math.random()*3;
+
+        const hx =
+            16*Math.pow(
+                Math.sin(t),
+                3
+            );
+
+        const hy =
+            -(
+                13*Math.cos(t)
+                -5*Math.cos(2*t)
+                -2*Math.cos(3*t)
+                -Math.cos(4*t)
+            );
+
+        particles.push({
+
+            x:
+                W/2,
+
+            y:
+                H*.42,
+
+            vx:
+                hx*scale,
+
+            vy:
+                hy*scale,
+
+            life:
+                1.5,
+
+            size:
+                Math.random()*2+1,
+
+            color:
+                "255,90,160",
+
+            heart:true
+        });
+    }
+
+
+    /* 爱心中央爆炸 */
+
+    setTimeout(
+        ()=>{
+            createExplosion(
+                W/2,
+                H*.42
+            );
+        },
+        700
+    );
+
+
+    setTimeout(
+        ()=>{
+            heartMode=false;
+        },
+        5000
+    );
+}
+
+
+/* =====================================================
+   画星星
+===================================================== */
+
+function drawStars(
+    time
+){
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    mouseX +=
+        (targetX-mouseX)
+        *.025;
+
+    mouseY +=
+        (targetY-mouseY)
+        *.025;
+
+
+    for(
+        const star of stars
+    ){
+
+        const twinkle =
+            (
+                Math.sin(
+                    time*star.speed+
+                    star.phase
+                )+1
+            )/2;
+
+
+        const alpha =
+            star.alpha*
+            (.45+
+            twinkle*.55);
+
+
+        const parallax =
+            (star.depth-.5)*
+            24;
+
+
+        const x =
+            star.x+
+            (mouseX-W/2)*
+            parallax/W;
+
+
+        const y =
+            star.y+
+            (mouseY-H/2)*
+            parallax/H;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,
+            y,
+            star.r,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                255,
+                255,
+                ${alpha}
+            )`;
+
+        ctx.fill();
+
+
+        if(
+            star.r>1.2 &&
+            twinkle>.78
+        ){
+
+            const glow =
+                ctx.createRadialGradient(
+                    x,
+                    y,
+                    0,
+                    x,
+                    y,
+                    12
+                );
+
+            glow.addColorStop(
+                0,
+                `rgba(
+                    220,
+                    240,
+                    255,
+                    ${alpha*.5}
+                )`
+            );
+
+            glow.addColorStop(
+                1,
+                "rgba(220,240,255,0)"
+            );
+
+            ctx.fillStyle =
+                glow;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                12,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+        }
+    }
+}
+
+
+/* =====================================================
+   画流星
+===================================================== */
+
+function drawMeteors(
+    dt
+){
+
+    for(
+        let i=meteors.length-1;
+        i>=0;
+        i--
+    ){
+
+        const m =
+            meteors[i];
+
+        m.life+=dt;
+
+        m.x+=
+            m.vx*dt;
+
+        m.y+=
+            m.vy*dt;
+
+
+        const progress =
+            m.life/
+            m.maxLife;
+
+
+        const alpha =
+            progress<.1
+                ?progress/.1
+                :progress>.8
+                    ?(1-progress)/.2
+                    :1;
+
+
+        const velocity =
+            Math.sqrt(
+                m.vx*m.vx+
+                m.vy*m.vy
+            );
+
+
+        const tx =
+            m.x-
+            m.vx/
+            velocity*
+            m.trail;
+
+
+        const ty =
+            m.y-
+            m.vy/
+            velocity*
+            m.trail;
+
+
+        const gradient =
+            ctx.createLinearGradient(
+                tx,
+                ty,
+                m.x,
+                m.y
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(255,255,255,0)"
+        );
+
+        gradient.addColorStop(
+            .7,
+            `rgba(
+                120,
+                205,
+                255,
+                ${alpha*.45}
+            )`
+        );
+
+        gradient.addColorStop(
+            1,
+            `rgba(
+                255,
+                255,
+                255,
+                ${alpha}
+            )`
+        );
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            tx,
+            ty
+        );
+
+        ctx.lineTo(
+            m.x,
+            m.y
+        );
+
+        ctx.strokeStyle =
+            gradient;
+
+        ctx.lineWidth =
+            m.superMeteor
+                ?3
+                :1.5;
+
+        ctx.stroke();
+
+
+        /* 流星头 */
+
+        ctx.beginPath();
+
+        ctx.arc(
+            m.x,
+            m.y,
+            m.size,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                255,
+                255,
+                ${alpha}
+            )`;
+
+        ctx.shadowBlur =
+            m.superMeteor
+                ?35
+                :18;
+
+        ctx.shadowColor =
+            "#9edcff";
+
+        ctx.fill();
+
+        ctx.shadowBlur=0;
+
+
+        /* 超级流星消失 */
+
+        if(
+            m.superMeteor &&
+            progress>.76 &&
+            !m.exploded
+        ){
+
+            m.exploded=true;
+
+            createExplosion(
+                m.x,
+                m.y
+            );
+        }
+
+
+        if(
+            m.life>
+            m.maxLife ||
+            m.x<-400 ||
+            m.y>H+400
+        ){
+
+            meteors.splice(
+                i,
+                1
+            );
+        }
+    }
+}
+
+
+/* =====================================================
+   画粒子
+===================================================== */
+
+function drawParticles(
+    dt
+){
+
+    ectx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    for(
+        let i=particles.length-1;
+        i>=0;
+        i--
+    ){
+
+        const p =
+            particles[i];
+
+
+        p.life -=
+            dt*
+            (p.heart?.35:.65);
+
+
+        p.x +=
+            p.vx*dt;
+
+        p.y +=
+            p.vy*dt;
+
+
+        p.vx *=
+            .985;
+
+        p.vy *=
+            .985;
+
+
+        if(
+            !p.heart
+        ){
+
+            p.vy +=
+                22*dt;
+        }
+
+
+        if(
+            p.life<=0
+        ){
+
+            particles.splice(
+                i,
+                1
+            );
+
+            continue;
+        }
+
+
+        ectx.beginPath();
+
+        ectx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI*2
+        );
+
+
+        ectx.fillStyle =
+            `rgba(
+                ${p.color},
+                ${Math.min(
+                    p.life,
+                    1
+                )}
+            )`;
+
+
+        ectx.shadowBlur =
+            14;
+
+        ectx.shadowColor =
+            `rgba(
+                ${p.color},
+                ${p.life}
+            )`;
+
+
+        ectx.fill();
+
+        ectx.shadowBlur=0;
+    }
+}
+
+
+/* =====================================================
+   动画
+===================================================== */
+
+let last =
+    performance.now();
+
+let meteorTimer=0;
+
+let superTimer=0;
+
+let rainTimer=0;
+
+
+function animate(
+    now
+){
+
+    const dt =
+        Math.min(
+            (now-last)/1000,
+            .05
+        );
+
+    last=now;
+
+
+    drawStars(now);
+
+    drawMeteors(dt);
+
+    drawParticles(dt);
+
+
+    meteorTimer+=dt;
+
+    superTimer+=dt;
+
+    rainTimer+=dt;
+
+
+    /* 普通流星 */
+
+    if(
+        meteorTimer>
+        1.1+
+        Math.random()*1.7
+    ){
+
+        spawnMeteor();
+
+        meteorTimer=0;
+    }
+
+
+    /* 超级流星 */
+
+    if(
+        superTimer>
+        9+
+        Math.random()*9
+    ){
+
+        spawnMeteor(true);
+
+        superTimer=0;
+    }
+
+
+    /* 流星雨 */
+
+    if(
+        rainTimer>
+        22+
+        Math.random()*18
+    ){
+
+        for(
+            let i=0;
+            i<18;
+            i++
+        ){
+
+            setTimeout(
+                ()=>{
+                    spawnMeteor(
+                        Math.random()>.85
+                    );
+                },
+                i*120
+            );
+        }
+
+        rainTimer=0;
+    }
+
+
+    requestAnimationFrame(
+        animate
+    );
+}
+
+requestAnimationFrame(
+    animate
+);
+
+
+/* =====================================================
+   音乐
+===================================================== */
+
+const music =
+    document.getElementById(
+        "music"
+    );
+
+const musicBtn =
+    document.getElementById(
+        "musicBtn"
+    );
+
+let playing=false;
+
+
+musicBtn.addEventListener(
+    "click",
+    e=>{
+
+        e.stopPropagation();
+
+
+        if(!playing){
+
+            music.play()
+            .then(()=>{
+
+                playing=true;
+
+                musicBtn.innerHTML=
+                    "🔊";
+
+            })
+            .catch(()=>{});
+
+        }else{
+
+            music.pause();
+
+            playing=false;
+
+            musicBtn.innerHTML=
+                "🎵";
+        }
+    }
+);
+
+
+/* 第一次点击尝试播放 */
+
+document.addEventListener(
+    "click",
+    function firstClick(){
+
+        if(!playing){
+
+            music.play()
+            .then(()=>{
+
+                playing=true;
+
+                musicBtn.innerHTML=
+                    "🔊";
+
+            })
+            .catch(()=>{});
+        }
+
+        document.removeEventListener(
+            "click",
+            firstClick
+        );
+    }
+);
+
+</script>
+
+</body>
+</html>
